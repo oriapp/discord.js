@@ -279,7 +279,7 @@ class Util extends null {
       throw response;
     }
     const { shards } = await response.json();
-    return Math.ceil((shards * (1_000 / guildsPerShard)) / multipleOf) * multipleOf;
+    return ~((shards * (1_000 / guildsPerShard)) / multipleOf) * multipleOf;
   }
 
   /**
@@ -462,7 +462,7 @@ class Util extends null {
    */
   static resolveColor(color) {
     if (typeof color === 'string') {
-      if (color === 'RANDOM') return Math.floor(Math.random() * (0xffffff + 1));
+      if (color === 'RANDOM') return ~~(Math.random() * (0xffffff + 1));
       if (color === 'DEFAULT') return 0;
       color = Colors[color] ?? parseInt(color.replace('#', ''), 16);
     } else if (Array.isArray(color)) {
@@ -532,10 +532,10 @@ class Util extends null {
     let low = parseInt(num.slice(-10));
     while (low > 0 || high > 0) {
       bin = String(low & 1) + bin;
-      low = Math.floor(low / 2);
+      low = ~~(low / 2);
       if (high > 0) {
         low += 5_000_000_000 * (high % 2);
-        high = Math.floor(high / 2);
+        high = ~~(high / 2);
       }
     }
     return bin;
@@ -556,8 +556,8 @@ class Util extends null {
 
       dec = (low % 10).toString() + dec;
       num =
-        Math.floor(high / 10).toString(2) +
-        Math.floor(low / 10)
+        ~~(high / 10).toString(2) +
+        ~~(low / 10)
           .toString(2)
           .padStart(32, '0');
     }
@@ -565,7 +565,7 @@ class Util extends null {
     num = parseInt(num, 2);
     while (num > 0) {
       dec = (num % 10).toString() + dec;
-      num = Math.floor(num / 10);
+      num = ~~(num / 10);
     }
 
     return dec;
